@@ -1,0 +1,10 @@
+{
+  "java.jdt.ls.java.home": "C:\\softwear\\sts432\\sts-4.32.1.RELEASE\\plugins\\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.8.v20250724-1412\\jre",
+  "java.configuration.runtimes": [
+    {
+      "name": "JavaSE-21",
+      "path": "C:\\softwear\\sts432\\sts-4.32.1.RELEASE\\plugins\\org.eclipse.justj.openjdk.hotspot.jre.full.win32.x86_64_21.0.8.v20250724-1412\\jre",
+      "default": true
+    }
+  ]
+}
