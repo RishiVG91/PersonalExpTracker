@@ -3,6 +3,7 @@ package com.settribe.expensetracker.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 public class RegisterRequest {
     @NotBlank(message = "Name is required")
@@ -15,7 +16,9 @@ public class RegisterRequest {
     private String email;
 
     @NotBlank(message = "Password is required")
-    @Size(min = 6, max = 100, message = "Password must be at least 6 characters")
+    @Size(min = 7, max = 100, message = "Password must be at least 7 characters")
+    @Pattern(regexp = "^[A-Z].*", message = "First letter of password must be capital")
+    @Pattern(regexp = ".*[!@#$%^&*(),.?\":{}|<>_+\\-].*", message = "Password must contain at least one special character")
     private String password;
 
     // Getters and Setters

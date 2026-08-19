@@ -15,11 +15,17 @@ import {
   Info,
   Calendar,
   Layers,
-  Tag
+  Tag,
+  IndianRupee
 } from 'lucide-react';
 
 function Dashboard() {
   const { user, logout } = useAuth();
+  const handleLogout = () => {
+    if (window.confirm('Are you sure you want to sign out?')) {
+      logout();
+    }
+  };
   const [transactions, setTransactions] = useState([]);
   const [summary, setSummary] = useState({ totalIncome: 0, totalExpense: 0, balance: 0, categorySummary: {} });
   
@@ -47,7 +53,7 @@ function Dashboard() {
   const [formLoading, setFormLoading] = useState(false);
 
   // Fetch data
-  const fetchData = async () => {
+  const fetchData = async (isAfterSubmit = false) => {
     setLoading(true);
     setError('');
     try {
@@ -65,6 +71,10 @@ function Dashboard() {
 
       setTransactions(txData);
       setSummary(summaryData);
+
+      if (isAfterSubmit && summaryData.totalExpense > summaryData.totalIncome) {
+        alert('Warning: Your total expenses have exceeded your total income!');
+      }
     } catch (err) {
       setError(err.message || 'Failed to load transaction data.');
     } finally {
@@ -134,7 +144,7 @@ function Dashboard() {
       }
       
       setIsModalOpen(false);
-      fetchData();
+      fetchData(true);
     } catch (err) {
       try {
         const validationErrors = JSON.parse(err.message);
@@ -152,7 +162,7 @@ function Dashboard() {
     if (!window.confirm('Are you sure you want to delete this transaction?')) return;
     try {
       await api.delete(`/transactions/${id}`);
-      fetchData();
+      fetchData(true);
     } catch (err) {
       alert(err.message || 'Failed to delete transaction.');
     }
@@ -178,9 +188,7 @@ function Dashboard() {
       {/* Header */}
       <header className="glass-panel" style={{ padding: '1rem 1.5rem', borderRadius: 'var(--radius-sm)' }}>
         <div className="logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '-4px' }}>
-            <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-          </svg>
+          <IndianRupee size={24} strokeWidth={3} style={{ marginRight: '4px' }} />
           <span>Personal</span> Expense Tracker
         </div>
         <div className="user-nav">
@@ -188,7 +196,7 @@ function Dashboard() {
             <span className="username">{user?.name}</span>
             <span className="user-email">{user?.email}</span>
           </div>
-          <button className="btn btn-secondary btn-icon" onClick={logout} title="Sign Out">
+          <button className="btn btn-secondary btn-icon" onClick={handleLogout} title="Sign Out">
             <LogOut size={18} />
           </button>
         </div>
@@ -228,6 +236,14 @@ function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* Warning Banner when Expense > Income */}
+      {summary.totalExpense > summary.totalIncome && (
+        <div className="error-banner" style={{ background: 'rgba(239, 68, 68, 0.1)', border: '1px solid rgba(239, 68, 68, 0.2)', color: '#fca5a5', marginTop: '1.5rem', marginBottom: '0px' }}>
+          <AlertCircle size={18} />
+          <span><strong>Warning:</strong> Your total expenses exceed your total income! Please review your budget.</span>
+        </div>
+      )}
 
       {/* Main Grid */}
       <div className="dashboard-grid">

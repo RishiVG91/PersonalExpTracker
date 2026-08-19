@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { api } from '../utils/api';
-import { User, Lock, Mail, Eye, EyeOff, AlertCircle, CheckCircle } from 'lucide-react';
+import { User, Lock, Mail, Eye, EyeOff, AlertCircle, CheckCircle, IndianRupee } from 'lucide-react';
 
 function Register() {
   const [name, setName] = useState('');
@@ -31,8 +31,18 @@ function Register() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters.');
+    if (password.length < 7) {
+      setError('Password must be at least 7 characters.');
+      return;
+    }
+
+    if (!/^[A-Z]/.test(password)) {
+      setError('First letter of password must be capital.');
+      return;
+    }
+
+    if (!/[!@#$%^&*(),.?":{}|<>_+\-]/.test(password)) {
+      setError('Password must contain at least one special character.');
       return;
     }
 
@@ -60,9 +70,7 @@ function Register() {
       <div className="auth-card glass-panel">
         <div className="auth-header">
           <div className="logo" style={{ justifyContent: 'center', marginBottom: '1rem' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '-4px' }}>
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
+            <IndianRupee size={24} strokeWidth={3} style={{ marginRight: '4px' }} />
             <span>Personal</span> Expense Tracker
           </div>
           <h2 className="auth-title">Create Account</h2>
@@ -127,7 +135,7 @@ function Register() {
                 id="password"
                 className="form-control"
                 style={{ paddingLeft: '38px', paddingRight: '40px', width: '100%' }}
-                placeholder="At least 6 characters"
+                placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
@@ -141,6 +149,16 @@ function Register() {
               </button>
             </div>
             {fieldErrors.password && <span className="error-text">{fieldErrors.password}</span>}
+            {!fieldErrors.password && (
+              <div className="help-text" style={{ fontSize: '11px', color: '#9ca3af', marginTop: '6px', lineHeight: '1.4' }}>
+                Password requirements:
+                <ul style={{ paddingLeft: '15px', marginTop: '2px', listStyleType: 'disc' }}>
+                  <li>At least 7 characters required</li>
+                  <li>First letter must be capital (A-Z)</li>
+                  <li>At least one special character required (e.g. @, $, !, etc.)</li>
+                </ul>
+              </div>
+            )}
           </div>
 
           <div className="form-group">

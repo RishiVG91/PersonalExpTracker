@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../utils/api';
-import { Lock, Mail, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Lock, Mail, Eye, EyeOff, AlertCircle, IndianRupee } from 'lucide-react';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -39,9 +39,7 @@ function Login() {
       <div className="auth-card glass-panel">
         <div className="auth-header">
           <div className="logo" style={{ justifyContent: 'center', marginBottom: '1rem' }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '-4px' }}>
-              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
-            </svg>
+            <IndianRupee size={24} strokeWidth={3} style={{ marginRight: '4px' }} />
             <span>Personal</span> Expense Tracker
           </div>
           <h2 className="auth-title">Welcome Back</h2>
