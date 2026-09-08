@@ -1,0 +1,34 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: expensetracker-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - PORT=8080
+      - APP_JWT_SECRET=${APP_JWT_SECRET:-Y2hvb29zZS1hLXNlY3VyZS1hbmQtc3Ryb25nLWtleS1mb3Itand0LXNpZ25pbmctMjU2LWJpdHM=}
+      - APP_JWT_EXPIRATION_MS=86400000
+      # You can override with external PostgreSQL DB_URL when needed:
+      - DB_URL=${DB_URL:-jdbc:h2:mem:expansedb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+      - DB_USERNAME=${DB_USERNAME:-sa}
+      - DB_PASSWORD=${DB_PASSWORD:-}
+    networks:
+      - expensetracker-net
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: expensetracker-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - expensetracker-net
+
+networks:
+  expensetracker-net:
+    driver: bridge
