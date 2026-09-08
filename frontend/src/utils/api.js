@@ -1,13 +1,16 @@
-const API_BASE = '/api';
+const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
 
 const getHeaders = () => {
   const headers = {
     'Content-Type': 'application/json',
   };
+
   const token = localStorage.getItem('token');
+
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;
   }
+
   return headers;
 };
 
@@ -17,14 +20,22 @@ export const api = {
       method: 'GET',
       headers: getHeaders(),
     });
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
+
       // Collect specific field errors if returned as key-value pairs
       if (res.status === 400 && !errData.error) {
         throw new Error(JSON.stringify(errData));
       }
-      throw new Error(errData.error || errData.message || 'GET Request failed');
+
+      throw new Error(
+        errData.error ||
+        errData.message ||
+        'GET Request failed'
+      );
     }
+
     return res.json();
   },
 
@@ -34,13 +45,21 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
+
       if (res.status === 400 && !errData.error) {
         throw new Error(JSON.stringify(errData));
       }
-      throw new Error(errData.error || errData.message || 'POST Request failed');
+
+      throw new Error(
+        errData.error ||
+        errData.message ||
+        'POST Request failed'
+      );
     }
+
     return res.json();
   },
 
@@ -50,13 +69,21 @@ export const api = {
       headers: getHeaders(),
       body: JSON.stringify(data),
     });
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
+
       if (res.status === 400 && !errData.error) {
         throw new Error(JSON.stringify(errData));
       }
-      throw new Error(errData.error || errData.message || 'PUT Request failed');
+
+      throw new Error(
+        errData.error ||
+        errData.message ||
+        'PUT Request failed'
+      );
     }
+
     return res.json();
   },
 
@@ -65,10 +92,17 @@ export const api = {
       method: 'DELETE',
       headers: getHeaders(),
     });
+
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
-      throw new Error(errData.error || errData.message || 'DELETE Request failed');
+
+      throw new Error(
+        errData.error ||
+        errData.message ||
+        'DELETE Request failed'
+      );
     }
+
     return res.json();
-  }
+  },
 };
