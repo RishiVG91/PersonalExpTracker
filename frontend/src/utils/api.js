@@ -1,4 +1,5 @@
-const API_BASE = `${import.meta.env.VITE_API_URL}/api`;
+const rawApiUrl = import.meta.env.VITE_API_URL ? import.meta.env.VITE_API_URL.replace(/\/+$/, '') : '';
+const API_BASE = rawApiUrl ? `${rawApiUrl}/api` : '/api';
 
 const getHeaders = () => {
   const headers = {
@@ -25,7 +26,7 @@ export const api = {
       const errData = await res.json().catch(() => ({}));
 
       // Collect specific field errors if returned as key-value pairs
-      if (res.status === 400 && !errData.error) {
+      if (res.status === 400 && !errData.error && !errData.message) {
         throw new Error(JSON.stringify(errData));
       }
 
@@ -49,7 +50,7 @@ export const api = {
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
 
-      if (res.status === 400 && !errData.error) {
+      if (res.status === 400 && !errData.error && !errData.message) {
         throw new Error(JSON.stringify(errData));
       }
 
@@ -73,7 +74,7 @@ export const api = {
     if (!res.ok) {
       const errData = await res.json().catch(() => ({}));
 
-      if (res.status === 400 && !errData.error) {
+      if (res.status === 400 && !errData.error && !errData.message) {
         throw new Error(JSON.stringify(errData));
       }
 
